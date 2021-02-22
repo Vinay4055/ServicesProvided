@@ -1,7 +1,5 @@
 package com.nagarro.service.entity;
 
-import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
 @Getter
@@ -9,5 +7,4 @@ import lombok.Setter;
 public class ServiceCategory {
 	String id;
 	String name;
-	List<Service> service;
 }

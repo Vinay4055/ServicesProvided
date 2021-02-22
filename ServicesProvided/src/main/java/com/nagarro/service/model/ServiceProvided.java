@@ -9,6 +9,6 @@ public class ServiceProvided {
 	String id;
 	String name;
 	Float cost;
-	ServiceCategory category;
+	String categoryId;
 	
 }

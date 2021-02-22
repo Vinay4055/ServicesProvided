@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Service {
+public class ServiceProvided {
 	String id;
 	String name;
 	Float cost;
-	ServiceCategory category;
+	String categoryId;
 	
 }
