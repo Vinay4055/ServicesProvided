@@ -1,4 +1,4 @@
-package com.nagarro.service.model;
+package com.nagarro.serviceProvided.model;
 
 import lombok.Getter;
 import lombok.Setter;

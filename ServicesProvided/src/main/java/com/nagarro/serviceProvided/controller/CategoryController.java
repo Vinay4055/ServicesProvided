@@ -1,4 +1,4 @@
-package com.nagarro.service.controller;
+package com.nagarro.serviceProvided.controller;
 
 import java.util.List;
 
@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nagarro.service.mapper.Mapper;
-import com.nagarro.service.model.ServiceCategory;
-import com.nagarro.service.service.MaintainCategory;
+import com.nagarro.serviceProvided.mapper.Mapper;
+import com.nagarro.serviceProvided.model.ServiceCategory;
+import com.nagarro.serviceProvided.service.MaintainCategoryService;
 @RestController
-@RequestMapping("/category")
+@RequestMapping("/serviceProvided/category")
 public class CategoryController {
 	@Autowired
-	MaintainCategory maintainCategory;
+	MaintainCategoryService maintainCategory;
 	@Autowired
 	Mapper mapper;
 	@GetMapping("/{categoryId}")

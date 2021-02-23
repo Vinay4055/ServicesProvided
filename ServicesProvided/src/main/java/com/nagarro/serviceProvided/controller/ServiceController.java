@@ -1,4 +1,4 @@
-package com.nagarro.service.controller;
+package com.nagarro.serviceProvided.controller;
 
 import java.util.List;
 
@@ -17,10 +17,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nagarro.service.mapper.Mapper;
-import com.nagarro.service.model.ServiceProvided;
-import com.nagarro.service.service.MaintainService;
-
+import com.nagarro.serviceProvided.mapper.Mapper;
+import com.nagarro.serviceProvided.model.ServiceProvided;
+import com.nagarro.serviceProvided.service.MaintainService;
 
 @RestController
 @RequestMapping("/serviceProvided")
@@ -29,16 +28,29 @@ public class ServiceController {
 	MaintainService maintainService;
 	@Autowired
 	Mapper mapper;
+
 	@GetMapping("/{serviceId}")
-	public ResponseEntity<ServiceProvided> getService(@PathVariable(name="serviceId") String serviceId) {
-		ServiceProvided serviceProvided = mapper.convertServiceProvidedEntityToModel(maintainService.getServiceById(serviceId));
-		if(serviceProvided != null)
-			return new ResponseEntity<ServiceProvided>(serviceProvided,HttpStatus.FOUND);
+	public ResponseEntity<ServiceProvided> getService(@PathVariable(name = "serviceId") String serviceId) {
+		ServiceProvided serviceProvided = mapper
+				.convertServiceProvidedEntityToModel(maintainService.getServiceById(serviceId));
+		if (serviceProvided != null)
+			return new ResponseEntity<ServiceProvided>(serviceProvided, HttpStatus.FOUND);
 		else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
+
 	}
-	/* Will Implement Later as require Many To Many relation ship
+
+	@GetMapping("/findCategoryId/{serviceId}")
+	public ResponseEntity<String> getCategoryIdFromService(@PathVariable(name = "serviceId") String serviceId) {
+		String categoryId = maintainService.getCategoryIdByServiceId(serviceId);
+		if (categoryId != null)
+			return new ResponseEntity<String>(categoryId, HttpStatus.FOUND);
+		else
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	/*
+	 * Will Implement Later as require Many To Many relation ship
+	 * 
 	 * @GetMapping("/category/{categoryName}") public
 	 * ResponseEntity<List<ServiceProvided>>
 	 * getServiceByCategory(@PathVariable(name="categoryName") String categoryName)
@@ -51,53 +63,54 @@ public class ServiceController {
 	 * 
 	 * }
 	 */
-	
+
 	@GetMapping("/")
 	public ResponseEntity<List<ServiceProvided>> getAllService() {
-		List<ServiceProvided> serviceProvidedList= mapper.convertServiceProvidedEntityListToModelList(maintainService.getAllService());
-		if(serviceProvidedList != null)
-			return new ResponseEntity<List<ServiceProvided>>(serviceProvidedList,HttpStatus.FOUND);
+		List<ServiceProvided> serviceProvidedList = mapper
+				.convertServiceProvidedEntityListToModelList(maintainService.getAllService());
+		if (serviceProvidedList != null)
+			return new ResponseEntity<List<ServiceProvided>>(serviceProvidedList, HttpStatus.FOUND);
 		else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
+
 	}
-	
-	
-	
+
 	@PostMapping("/")
-	public ResponseEntity<Void> addService(@RequestBody @Valid ServiceProvided serviceProvided,BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<Void> addService(@RequestBody @Valid ServiceProvided serviceProvided,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
 			return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		else {
+		} else {
 			Boolean flag = maintainService.addService(mapper.convertServiceProvidedModelToEntity(serviceProvided));
-			if(flag)
+			if (flag)
 				return new ResponseEntity<Void>(HttpStatus.CREATED);
 			else
 				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-			
+
 	}
+
 	@DeleteMapping("/{serviceId}")
-	public ResponseEntity<Void> deleteService(@PathVariable(name="serviceId")String serviceId){
+	public ResponseEntity<Void> deleteService(@PathVariable(name = "serviceId") String serviceId) {
 		Boolean flag = maintainService.deleteService(serviceId);
-		if(flag)
+		if (flag)
 			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
 		else
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
+
 	@PutMapping("/")
-	public ResponseEntity<Void> editService(@RequestBody @Valid ServiceProvided serviceProvided,BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<Void> editService(@RequestBody @Valid ServiceProvided serviceProvided,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
 			return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		else {
+		} else {
 			Boolean flag = maintainService.editService(mapper.convertServiceProvidedModelToEntity(serviceProvided));
-			if(flag)
+			if (flag)
 				return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
 			else
 				return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 }
