@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.nagarro.serviceProvided.mapper.Mapper;
 import com.nagarro.serviceProvided.model.ServiceCategory;
 import com.nagarro.serviceProvided.service.MaintainCategoryService;
+
 @RestController
 @RequestMapping("/serviceProvided/category")
 public class CategoryController {
@@ -27,59 +28,67 @@ public class CategoryController {
 	MaintainCategoryService maintainCategory;
 	@Autowired
 	Mapper mapper;
+
 	@GetMapping("/{categoryId}")
-	public ResponseEntity<ServiceCategory> getCategory(@PathVariable(name="categoryId") String categoryId) {
-		ServiceCategory serviceCategory= mapper.convertServiceCategoryEntityToModel(maintainCategory.getCategoryById(categoryId));
-		if(serviceCategory != null)
-			return new ResponseEntity<ServiceCategory>(serviceCategory,HttpStatus.FOUND);
-		else
+	public ResponseEntity<ServiceCategory> getCategory(@PathVariable(name = "categoryId") String categoryId) {
+		if (maintainCategory.getCategoryById(categoryId) != null) {
+			ServiceCategory serviceCategory = mapper
+					.convertServiceCategoryEntityToModel(maintainCategory.getCategoryById(categoryId));
+
+			return new ResponseEntity<ServiceCategory>(serviceCategory, HttpStatus.FOUND);
+
+		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
+
 	}
+
 	@GetMapping("/")
 	public ResponseEntity<List<ServiceCategory>> getAllCategory() {
-		List<ServiceCategory> serviceCategoryList= mapper.convertServiceCategoryEntityListToModelList(maintainCategory.getAllCategory());
-		if(serviceCategoryList != null)
-			return new ResponseEntity<List<ServiceCategory>>(serviceCategoryList,HttpStatus.FOUND);
+		List<ServiceCategory> serviceCategoryList = mapper
+				.convertServiceCategoryEntityListToModelList(maintainCategory.getAllCategory());
+		if (serviceCategoryList != null)
+			return new ResponseEntity<List<ServiceCategory>>(serviceCategoryList, HttpStatus.FOUND);
 		else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		
+
 	}
-	
+
 	@PostMapping("/")
-	public ResponseEntity<Void> createCategory(@RequestBody @Valid ServiceCategory serviceCategory,BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<Void> createCategory(@RequestBody @Valid ServiceCategory serviceCategory,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
 			return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		else {
+		} else {
 			Boolean flag = maintainCategory.createCategory(mapper.convertServiceCategoryModelToEntity(serviceCategory));
-			if(flag)
+			if (flag)
 				return new ResponseEntity<Void>(HttpStatus.CREATED);
 			else
 				return new ResponseEntity<Void>(HttpStatus.CONFLICT);
 		}
-			
+
 	}
+
 	@DeleteMapping("/{categoryId}")
-	public ResponseEntity<Void> deleteCategory(@PathVariable(name="categoryId")String categoryId){
+	public ResponseEntity<Void> deleteCategory(@PathVariable(name = "categoryId") String categoryId) {
 		Boolean flag = maintainCategory.deleteCategory(categoryId);
-		if(flag)
+		if (flag)
 			return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
 		else
 			return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 	}
+
 	@PutMapping("/")
-	public ResponseEntity<Void> editCategory(@RequestBody @Valid ServiceCategory serviceCategory,BindingResult bindingResult){
-		if(bindingResult.hasErrors()) {
+	public ResponseEntity<Void> editCategory(@RequestBody @Valid ServiceCategory serviceCategory,
+			BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
 			return new ResponseEntity<Void>(HttpStatus.UNPROCESSABLE_ENTITY);
-		}
-		else {
+		} else {
 			Boolean flag = maintainCategory.editCategory(mapper.convertServiceCategoryModelToEntity(serviceCategory));
-			if(flag)
+			if (flag)
 				return new ResponseEntity<Void>(HttpStatus.ACCEPTED);
 			else
 				return new ResponseEntity<Void>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 }

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.nagarro.serviceProvided.entity.ServiceCategory;
 import com.nagarro.serviceProvided.entity.ServiceProvided;
 import com.nagarro.serviceProvided.service.MaintainService;
 
@@ -30,11 +31,20 @@ public class MaintainServiceImpl implements MaintainService {
 
 	@Override
 	public Boolean addService(ServiceProvided serviceProvided) {
-		if (!serviceProvidedList.contains(serviceProvided)) {
+		boolean serviceExist = false;
+		for (ServiceProvided existingServiceProvided : serviceProvidedList)
+			if (existingServiceProvided.getId().equals(serviceProvided.getId())) {
+				serviceExist = true;
+				break;
+
+			}
+		if (serviceExist)
+			return false;
+		else {
 			serviceProvidedList.add(serviceProvided);
 			return true;
-		} else
-			return false;
+		}
+
 	}
 
 	@Override
@@ -52,6 +62,8 @@ public class MaintainServiceImpl implements MaintainService {
 		ServiceProvided searchedServiceProvided = getServiceById(serviceProvided.getId());
 		if (searchedServiceProvided != null) {
 			searchedServiceProvided.setName(serviceProvided.getName());
+			searchedServiceProvided.setCategoryId(serviceProvided.getCategoryId());
+			searchedServiceProvided.setCost(serviceProvided.getCost());
 			return true;
 		} else
 			return false;
@@ -81,7 +93,10 @@ public class MaintainServiceImpl implements MaintainService {
 
 	@Override
 	public String getCategoryIdByServiceId(String serviceId) {
-		return getServiceById(serviceId).getCategoryId();
+		if (getServiceById(serviceId) != null)
+			return getServiceById(serviceId).getCategoryId();
+		else
+			return null;
 
 	}
 

@@ -5,7 +5,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ServiceCategory {
-	
+	public ServiceCategory() {}
 	public ServiceCategory(String id, String name) {
 		super();
 		this.id = id;

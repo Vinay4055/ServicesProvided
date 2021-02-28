@@ -8,22 +8,33 @@ import org.springframework.stereotype.Service;
 
 import com.nagarro.serviceProvided.entity.ServiceCategory;
 import com.nagarro.serviceProvided.service.MaintainCategoryService;
+
 @Service
 public class MaintainCategoryServiceImpl implements MaintainCategoryService {
 
 	public static List<ServiceCategory> serviceCategoryList = new ArrayList<>();
 	static {
-		serviceCategoryList.add(new ServiceCategory("1","Parlour"));
-		serviceCategoryList.add(new ServiceCategory("2","Electrician"));
-		serviceCategoryList.add(new ServiceCategory("3","Plumber"));
+		serviceCategoryList.add(new ServiceCategory("1", "Parlour"));
+		serviceCategoryList.add(new ServiceCategory("2", "Electrician"));
+		serviceCategoryList.add(new ServiceCategory("3", "Plumber"));
 	}
+
 	@Override
 	public Boolean createCategory(ServiceCategory serviceCategory) {
-		if (!serviceCategoryList.contains(serviceCategory)) {
-			serviceCategoryList.add(serviceCategory);
-			return true;
-		} else
+		boolean categoryExist = false;
+		for (ServiceCategory existingServiceCategory : serviceCategoryList)
+			if (existingServiceCategory.getId().equals(serviceCategory.getId())
+					|| existingServiceCategory.getName().equals(serviceCategory.getName())) {
+				categoryExist = true;
+				break;
+
+			}
+		if (categoryExist)
 			return false;
+		else {
+			serviceCategoryList.add(serviceCategory);
+		return true;
+		}
 	}
 
 	@Override
@@ -42,8 +53,7 @@ public class MaintainCategoryServiceImpl implements MaintainCategoryService {
 		if (searchedServiceCategory != null) {
 			searchedServiceCategory.setName(serviceCategory.getName());
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 

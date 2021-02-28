@@ -31,11 +31,11 @@ public class ServiceController {
 
 	@GetMapping("/{serviceId}")
 	public ResponseEntity<ServiceProvided> getService(@PathVariable(name = "serviceId") String serviceId) {
-		ServiceProvided serviceProvided = mapper
-				.convertServiceProvidedEntityToModel(maintainService.getServiceById(serviceId));
-		if (serviceProvided != null)
+		if (maintainService.getServiceById(serviceId) != null) {
+			ServiceProvided serviceProvided = mapper
+					.convertServiceProvidedEntityToModel(maintainService.getServiceById(serviceId));
 			return new ResponseEntity<ServiceProvided>(serviceProvided, HttpStatus.FOUND);
-		else
+		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
@@ -66,11 +66,12 @@ public class ServiceController {
 
 	@GetMapping("/")
 	public ResponseEntity<List<ServiceProvided>> getAllService() {
-		List<ServiceProvided> serviceProvidedList = mapper
-				.convertServiceProvidedEntityListToModelList(maintainService.getAllService());
-		if (serviceProvidedList != null)
+		if (maintainService.getAllService() != null) {
+			List<ServiceProvided> serviceProvidedList = mapper
+					.convertServiceProvidedEntityListToModelList(maintainService.getAllService());
+
 			return new ResponseEntity<List<ServiceProvided>>(serviceProvidedList, HttpStatus.FOUND);
-		else
+		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 	}
